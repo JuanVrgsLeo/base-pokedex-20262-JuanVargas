@@ -1,0 +1,242 @@
+/* ===== Tokens de diseño ===== */
+:root {
+  --bg: #0e1226;
+  --bg-2: #151a36;
+  --surface: rgba(22, 27, 58, .74);
+  --surface-2: rgba(40, 48, 96, .62);
+  --solid: #1b2142;
+  --line: #ffffff14;
+  --ink: #f3f4fb;
+  --ink-2: #aab1d6;
+  --ink-3: #7780a8;
+  --red: #e3350d;
+  --yellow: #ffcb05;
+  --blue: #3d7dca;
+  --radius: 18px;
+  --shadow: 0 18px 40px -12px #000c;
+  --font: 'Rubik', system-ui, 'Segoe UI', sans-serif;
+  --pixel: 'Press Start 2P', ui-monospace, monospace;
+  --accent: #e3350d;
+  --accent-2: #3b6fd8;
+  --accent-ink: #fff;
+  color-scheme: dark;
+}
+
+/* Colores animables: la paleta de la región cambia con transición suave */
+@property --tint-a { syntax: '<color>'; inherits: true; initial-value: #2a3a8a55; }
+@property --tint-b { syntax: '<color>'; inherits: true; initial-value: #7a1f4a44; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(900px 600px at 10% -10%, var(--tint-a), transparent),
+    radial-gradient(800px 600px at 110% 110%, var(--tint-b), transparent),
+    var(--bg);
+  background-attachment: fixed;
+  transition: --tint-a .7s, --tint-b .7s;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+img { max-width: 100%; }
+kbd {
+  font: 600 .75rem var(--font);
+  padding: .1em .45em; border-radius: 6px;
+  background: var(--surface-2); border: 1px solid var(--line); box-shadow: 0 2px 0 #0006;
+}
+.muted { color: var(--ink-3); }
+
+.screen { max-width: 1320px; margin: 0 auto; padding: 20px 16px 48px; }
+
+/* ===== Componentes comunes ===== */
+.chip {
+  display: inline-flex; align-items: center; gap: .4em;
+  padding: .45em .9em; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  font-size: .85rem; font-weight: 500; white-space: nowrap;
+}
+button.chip:hover { background: #2d3566; }
+.chip.is-on { background: var(--yellow); color: #1a1a1a; }
+
+.icon-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface-2);
+  font-size: 1.2rem;
+  transition: background .2s, transform .2s;
+}
+.icon-btn:hover { background: var(--red); transform: translateX(-2px); }
+
+.type {
+  display: inline-block;
+  padding: .15em .6em; border-radius: 6px;
+  background: var(--c); color: #fff;
+  font-size: .68rem; font-weight: 700; letter-spacing: .02em;
+  text-shadow: 0 1px 1px #0006;
+}
+.type.lg { font-size: .85rem; padding: .3em .9em; border-radius: 999px; }
+
+.spinner {
+  display: inline-block; width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(var(--red) 0 45%, #111 45% 55%, #fff 55%);
+  border: 3px solid #111;
+  animation: spin .9s cubic-bezier(.6, .1, .4, .9) infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #ffffff22; border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+
+/* ===== Retrato de profesor (cabeza recortada del sprite 80x80) ===== */
+.prof { display: inline-flex; flex-shrink: 0; }
+.prof-face {
+  --s: 84px;
+  position: relative; overflow: hidden;
+  width: var(--s); height: var(--s); border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, color-mix(in srgb, var(--accent, #888) 55%, #fff));
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 3px var(--accent, #888), 0 8px 18px #0009;
+}
+.prof-face + .prof-face { margin-left: calc(var(--s) * -.3); }
+.prof-face img {
+  position: absolute; left: 50%; top: 0;
+  width: calc(var(--s) * 2.6); max-width: none;
+  translate: -50% -4%;
+  image-rendering: pixelated;
+}
+.prof-sm .prof-face { --s: 46px; border-width: 2px; }
+
+/* ===== Escena de portada (canvas + legendarios) ===== */
+.backdrop { --px: 0; --py: 0; --glow: #fff; position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #05040f; }
+.scene-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.scene-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 45%, #000a 100%); }
+.scene-legends img {
+  position: absolute; opacity: 0;
+  filter: drop-shadow(0 0 30px var(--glow)) drop-shadow(0 0 80px color-mix(in srgb, var(--glow) 50%, transparent));
+  transition: opacity 1.4s ease, translate .8s ease-out;
+}
+.scene-legends img.is-in { opacity: 1; }
+.scene-legends .main {
+  left: 50%; top: 50%; height: min(92vh, 110vw); width: auto; max-width: none;
+  margin: 0; transform-origin: center;
+  translate: calc(-50% + var(--px) * -50px) calc(-50% + var(--py) * -35px);
+  animation: hover-main 7s ease-in-out infinite;
+}
+.scene-legends .side {
+  top: calc(18vh + var(--i) * 14vh); height: min(46vh, 60vw); width: auto; max-width: none;
+  translate: calc(var(--px) * -90px) calc(var(--py) * -60px);
+  animation: hover-side calc(6s + var(--i) * 1.5s) ease-in-out infinite;
+}
+.scene-legends .side:nth-child(even) { left: -4vw; }
+.scene-legends .side:nth-child(odd) { right: -4vw; transform: scaleX(-1); }
+.backdrop[data-mode=region] .scene-legends img.is-in { opacity: .55; }
+.backdrop[data-mode=region] .scene-legends .main { height: min(80vh, 90vw); }
+
+@keyframes hover-main { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-2.5%) scale(1.03); } }
+@keyframes hover-side { 0%, 100% { margin-top: 0; } 50% { margin-top: -24px; } }
+@media (prefers-reduced-motion: reduce) { .scene-legends img { animation: none !important; } }
+
+/* Paneles de cristal sobre la escena */
+.map-card, .panel, .region-dex, .spotlight, .case, .region-card, .topbar .chip, .icon-btn {
+  -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
+}
+.card { background: var(--solid); }
+
+/* ===== Portada del juego como fondo (movimiento de cámara lento + parallax) ===== */
+.scene-cover {
+  position: absolute; inset: -4%;
+  width: 108%; height: 108%; max-width: none;
+  object-fit: cover;
+  translate: calc(var(--px) * -30px) calc(var(--py) * -20px);
+  animation: ken-burns 38s ease-in-out infinite alternate;
+  transition: translate .8s ease-out;
+}
+.backdrop[data-cover=yes] .scene-vignette { background: radial-gradient(ellipse at 50% 50%, transparent 55%, #000b 100%); }
+@keyframes ken-burns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.12) translate(-2%, -1.5%); }
+}
+/* Copia desenfocada que rellena los lados de las portadas verticales */
+.scene-cover-blur {
+  position: absolute; inset: -6%; width: 112%; height: 112%; max-width: none;
+  object-fit: cover; filter: blur(34px) brightness(.55) saturate(1.3);
+  display: none;
+}
+.backdrop[data-cover=yes][data-shape=portrait] .scene-cover-blur:not([hidden]) { display: block; }
+.backdrop[data-shape=portrait] .scene-cover {
+  inset: auto; left: 50%; top: 50%;
+  width: auto; height: 100%; object-fit: contain;
+  translate: calc(-50% + var(--px) * -30px) calc(-50% + var(--py) * -20px);
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Inicio: Arceus desciende entre destellos y queda "respirando" con un halo dorado */
+.backdrop[data-mode=home][data-cover=yes] .scene-cover {
+  animation: arceus-descend 2.6s cubic-bezier(.2, .8, .2, 1) both, arceus-breathe 6s 2.6s ease-in-out infinite;
+}
+@keyframes arceus-descend {
+  0% { opacity: 0; scale: 1.35; filter: brightness(3) blur(12px); }
+  40% { opacity: 1; filter: brightness(1.8) blur(3px); }
+  100% { opacity: 1; scale: 1; filter: brightness(1) blur(0); }
+}
+@keyframes arceus-breathe {
+  0%, 100% { scale: 1; filter: brightness(1) drop-shadow(0 0 0 #ffd66b00); }
+  50% { scale: 1.015; filter: brightness(1.1) drop-shadow(0 0 40px #ffd66b88); }
+}
+
+@media (prefers-reduced-motion: reduce) { .scene-cover { animation: none !important; } }
+
+/* ===== Apertura de la portada (como abrir la caja del juego) ===== */
+.cover-intro {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-content: center; justify-items: center; gap: 16px;
+  background: radial-gradient(circle, #0b0e1fcc, #000 80%);
+  cursor: pointer;
+  animation: intro-bg .5s both;
+}
+.cover-case {
+  position: relative; overflow: hidden;
+  width: min(78vw, 1000px); max-height: 70vh;
+  border-radius: 14px;
+  border: 6px solid #f4f4f4;
+  box-shadow: 0 0 0 2px #0006, 0 40px 90px #000, 0 0 80px color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: case-in .8s cubic-bezier(.2, 1.3, .4, 1) both;
+  transform-style: preserve-3d;
+}
+.cover-case img { display: block; width: 100%; height: 100%; max-height: 70vh; object-fit: cover; }
+.cover-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 35%, #fff8 50%, transparent 65%) no-repeat;
+  background-size: 250% 100%;
+  animation: shine 1.6s .5s ease-in-out both;
+}
+.cover-title { margin: 0; font: 1rem var(--pixel); color: #fff; text-shadow: 0 3px 0 #000; animation: rise .6s .4s both; }
+.cover-hint { margin: 0; font-size: .8rem; color: var(--ink-2); animation: blink 1.4s steps(2, jump-none) infinite; }
+
+.cover-intro.is-opening { animation: intro-out .9s ease-in both; }
+.cover-intro.is-opening .cover-case { animation: case-open .9s cubic-bezier(.6, 0, .4, 1) both; }
+.cover-intro.is-opening p { opacity: 0; transition: opacity .2s; }
+
+@keyframes intro-bg { from { opacity: 0; } }
+@keyframes case-in { from { opacity: 0; transform: perspective(1200px) rotateY(-35deg) scale(.6); } }
+@keyframes case-open { to { transform: scale(2.6); border-width: 0; border-radius: 0; opacity: 0; } }
+@keyframes intro-out { to { opacity: 0; } }
+/* shine y blink están definidos en home.css */
+
+/* Inicio: Arceus ocupa toda la pantalla (recorte centrado en su cabeza y cuerpo) */
+.backdrop[data-mode=home] .scene-cover {
+  inset: 0; left: 0; top: 0;
+  width: 100%; height: 100%; max-height: none !important;
+  object-fit: cover; object-position: 50% 20%;
+  translate: calc(var(--px) * -24px) calc(var(--py) * -16px);
+  -webkit-mask-image: none; mask-image: none;
+}
+.backdrop[data-mode=home] .scene-cover-blur { display: none !important; }

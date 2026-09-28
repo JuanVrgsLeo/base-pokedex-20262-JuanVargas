@@ -1,0 +1,108 @@
+/* ===== Región ===== */
+.topbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.region-title { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 1.6rem; font-weight: 800; }
+.region-title small { display: block; font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.topbar-chips { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.chip-place { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 700; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr); gap: 20px; align-items: start; }
+
+.map-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 24px; padding: 14px;
+  box-shadow: var(--shadow);
+}
+.map-frame {
+  position: relative; overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 0 0 3px #0b0e1f, 0 0 0 5px color-mix(in srgb, var(--accent, #fff) 70%, transparent);
+}
+#map { display: block; width: 100%; height: auto; image-rendering: pixelated; background: #1b2142; }
+
+/* Etiquetas sobre el mapa */
+.labels { position: absolute; inset: 0; pointer-events: none; }
+.lbl { position: absolute; translate: -50% -50%; white-space: nowrap; line-height: 1; }
+.lbl-town {
+  padding: .3em .55em; border-radius: 6px;
+  background: #0b0e1fd9; color: #fff;
+  font-size: clamp(.5rem, 1vw, .72rem); font-weight: 700;
+  box-shadow: 0 2px 6px #0006;
+}
+.lbl-route {
+  display: grid; place-items: center;
+  min-width: 1.7em; height: 1.7em; padding: 0 .3em; border-radius: 99px;
+  background: #fff; color: #1a1f3a; border: 2px solid #1a1f3a;
+  font-size: clamp(.45rem, .85vw, .65rem); font-weight: 800;
+}
+
+/* Cartel de ubicación al entrar en una zona (como en los juegos) */
+.banner {
+  position: absolute; top: 12px; left: 12px;
+  padding: 12px 18px 11px;
+  font: .72rem/1.4 var(--pixel); color: #3a2a14;
+  background: #f7ecd0;
+  border: 3px solid #6b4a2b; border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #fff8e6, 0 6px 0 #0004;
+  transform: translateY(-130%);
+  transition: transform .35s cubic-bezier(.3, 1.4, .5, 1);
+  pointer-events: none;
+}
+.banner[data-type=town] { background: #e3f0ff; border-color: #2c4f8a; color: #16284d; box-shadow: inset 0 0 0 2px #fff, 0 6px 0 #0004; }
+.banner.is-in { transform: none; }
+
+.tooltip {
+  position: absolute; z-index: 2; pointer-events: none;
+  translate: -50% calc(-100% - 12px);
+  padding: .35em .7em; border-radius: 8px;
+  background: #0b0e1fe6; color: #fff; font-size: .8rem; font-weight: 500; white-space: nowrap;
+}
+
+.map-loading {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center;
+  background: #0b0e1fee; color: var(--ink-2);
+}
+
+.controls { display: flex; align-items: center; gap: 22px; padding: 14px 4px 2px; flex-wrap: wrap; }
+.dpad { display: grid; grid-template: repeat(3, 44px) / repeat(3, 44px); flex-shrink: 0; }
+.dpad button {
+  border: 0; background: #2b3260; color: var(--ink-2);
+  box-shadow: inset 0 -4px 0 #0007;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.dpad button:active { background: var(--red); color: #fff; box-shadow: inset 0 2px 0 #0005; }
+.dpad [data-d=up] { grid-area: 1 / 2; border-radius: 10px 10px 0 0; }
+.dpad [data-d=left] { grid-area: 2 / 1; border-radius: 10px 0 0 10px; }
+.dpad [data-d=right] { grid-area: 2 / 3; border-radius: 0 10px 10px 0; }
+.dpad [data-d=down] { grid-area: 3 / 2; border-radius: 0 0 10px 10px; }
+.dpad::after { content: ''; grid-area: 2 / 2; background: #2b3260; }
+
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--ink-2); font-size: .85rem; flex: 1; min-width: 220px; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; }
+.sw.route { background: #e6cf94; }
+.sw.town { background: #e8e2d2; }
+.sw.cave { background: #a27f5a; }
+.sw.sea { background: #3f95db; }
+
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .topbar-chips { margin-left: 0; }
+}
+
+/* Nombre de zona / bioma sobre el mapa */
+.lbl-zone {
+  font-size: clamp(.5rem, 1.1vw, .8rem); font-weight: 800; font-style: italic;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 1px 0 #000, 0 0 6px #000c;
+  opacity: .9;
+}
+.chip-dex { background: var(--yellow); color: #1a1a1a; border-color: transparent; font-weight: 700; }
+.chip-dex:hover { background: #ffe066 !important; }
+
+/* Paleta de la región dentro del mundo */
+.region-title > span:last-child { background: linear-gradient(90deg, var(--ink), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.map-card, .panel, .region-dex { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 10%, var(--surface)), var(--surface) 40%, color-mix(in srgb, var(--accent-2) 10%, var(--surface))); }
+.tabs .is-on, .mon:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); }
+.rate i { background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
+.dpad button:active { background: var(--accent); color: var(--accent-ink); }
+.panel-kind { color: var(--accent); }

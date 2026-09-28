@@ -1,0 +1,162 @@
+/* ===== Panel de la ruta ===== */
+.panel {
+  position: sticky; top: 16px;
+  max-height: calc(100vh - 32px); overflow-y: auto;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 24px; padding: 18px;
+  box-shadow: var(--shadow);
+}
+.panel-head { margin-bottom: 14px; }
+.panel-kind { font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--accent, var(--yellow)); font-weight: 700; }
+.panel-head h3 { margin: 2px 0 0; font-size: 1.5rem; font-weight: 800; }
+.panel-empty { text-align: center; padding: 30px 10px; display: grid; justify-items: center; gap: 4px; }
+.panel-empty p { margin: 4px 0; }
+.town-icons { display: flex; gap: 10px; font-size: 2rem; }
+.notice, .period-note {
+  font-size: .8rem; line-height: 1.5; color: var(--ink-2);
+  background: var(--surface-2); border-radius: 12px; padding: 10px 12px; margin: 0 0 12px;
+}
+
+.versions { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; }
+.version {
+  flex-shrink: 0;
+  padding: .4em .85em; border-radius: 999px;
+  border: 2px solid var(--c); background: transparent;
+  font-size: .78rem; font-weight: 700;
+  transition: background .2s;
+}
+.version.is-on, .version:hover { background: var(--c); color: var(--t); }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--bg-2); border-radius: 12px; margin-bottom: 12px; }
+.tabs button { border: 0; background: none; padding: .6em; border-radius: 9px; font-weight: 600; color: var(--ink-2); }
+.tabs button b { font-size: .75rem; background: #ffffff14; padding: .1em .5em; border-radius: 99px; margin-left: 4px; }
+.tabs .is-on { background: var(--surface-2); color: var(--ink); box-shadow: 0 2px 6px #0005; }
+
+.method { margin-bottom: 16px; }
+.method h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-2); }
+
+.mon-list { display: grid; gap: 6px; }
+.mon {
+  display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 12px;
+  width: 100%; text-align: left;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid transparent; border-radius: 14px;
+  background: var(--surface-2);
+  animation: rise .35s both;
+  transition: border-color .2s, transform .2s, opacity .2s;
+}
+.mon:hover, .mon:focus-visible { border-color: #ffffff40; transform: translateX(3px); outline: none; }
+.mon.is-off { opacity: .45; }
+.mon-sprite {
+  width: 56px; height: 56px; border-radius: 12px;
+  background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 60%, transparent), color-mix(in srgb, var(--c) 18%, transparent));
+}
+.mon-sprite img { image-rendering: pixelated; display: block; }
+.mon-main { display: grid; gap: 2px; min-width: 0; }
+.mon-num { font-size: .7rem; color: var(--ink-3); font-weight: 500; }
+.mon-name { font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mon-types { display: flex; gap: 4px; }
+.mon-side { display: grid; grid-template-columns: auto auto; justify-items: end; align-items: center; gap: 3px 8px; font-size: .78rem; }
+.mon-lv { grid-column: 1 / -1; font-weight: 700; }
+.rate { width: 64px; height: 6px; background: #ffffff14; border-radius: 99px; overflow: hidden; }
+.rate i { display: block; height: 100%; background: linear-gradient(90deg, var(--yellow), var(--red)); border-radius: inherit; }
+.mon-pct { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.mon-conds { grid-column: 1 / -1; letter-spacing: 2px; }
+
+.item-list, .held { display: grid; gap: 6px; }
+.item {
+  display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center;
+  padding: 8px 12px; border-radius: 12px; background: var(--surface-2);
+}
+.item img { image-rendering: pixelated; }
+.item b { display: block; }
+.item .muted { font-size: .78rem; }
+
+@media (max-width: 980px) {
+  .panel { position: static; max-height: none; }
+}
+
+/* ===== Pokédex regional ===== */
+.region-dex {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 24px; padding: 18px; box-shadow: var(--shadow);
+}
+.dex-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+.dex-head h3 { margin: 2px 0 0; font-size: 1.5rem; font-weight: 800; }
+.dex-search {
+  flex: 1; min-width: 200px;
+  padding: .7em 1em; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--bg-2); color: var(--ink); font: inherit;
+}
+.dex-search:focus { outline: 2px solid var(--accent, var(--yellow)); }
+.dex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.dex-entry {
+  position: relative;
+  display: grid; justify-items: center; gap: 4px;
+  padding: 10px 8px 12px; border: 1px solid transparent; border-radius: 16px;
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--c) 45%, transparent), var(--surface-2) 70%);
+  transition: transform .2s, border-color .2s;
+}
+.dex-entry:hover, .dex-entry:focus-visible { transform: translateY(-3px); border-color: var(--c); outline: none; }
+.dex-entry img { image-rendering: pixelated; }
+.dex-entry b { font-size: .9rem; }
+.dex-num { position: absolute; top: 8px; left: 10px; font-size: .7rem; color: var(--ink-3); font-weight: 700; }
+.dex-sub { display: flex; align-items: center; gap: 8px; margin: 18px 0 10px; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-2); }
+.dex-sub b { font-size: .72rem; background: #ffffff14; padding: .1em .5em; border-radius: 99px; }
+.dex-forms .dex-sub:first-child { margin-top: 0; }
+
+/* ===== Mapa centrado + paneles translúcidos teñidos con la paleta de la región ===== */
+.layout { max-width: 1500px; margin-inline: auto; }
+.map-card { display: grid; justify-items: center; }
+.map-frame { width: fit-content; max-width: 100%; margin-inline: auto; }
+#map { width: auto; max-width: 100%; max-height: calc(100vh - 230px); margin-inline: auto; }
+.controls { width: 100%; justify-content: center; }
+
+.map-card, .panel, .region-dex {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%),
+    linear-gradient(340deg, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 55%),
+    rgba(8, 10, 24, .28);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  -webkit-backdrop-filter: blur(6px) saturate(1.4); backdrop-filter: blur(6px) saturate(1.4);
+  box-shadow: 0 18px 40px -16px #000a, inset 0 1px 0 #ffffff1f;
+}
+.panel h3, .panel h4, .panel-head, .mon, .item { text-shadow: 0 1px 3px #000c; }
+
+.mon, .item, .dex-entry, .notice, .period-note {
+  background: color-mix(in srgb, var(--accent) 14%, rgba(8, 10, 24, .38));
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.mon:hover, .mon:focus-visible, .dex-entry:hover { background: color-mix(in srgb, var(--accent) 30%, rgba(8, 10, 24, .35)); border-color: var(--accent); }
+.mon-sprite { background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 70%, transparent), transparent 75%); }
+.tabs { background: rgba(8, 10, 24, .35); }
+.tabs .is-on { background: color-mix(in srgb, var(--accent) 35%, rgba(8, 10, 24, .4)); }
+.version:not(.is-on) { background: rgba(8, 10, 24, .35); }
+.method h4 { color: #fff; }
+.mon-num, .muted, .mon-pct { color: #d8dcf0; }
+
+/* ===== Pantallas a la medida de la ventana (sin scroll de página) en escritorio ===== */
+@media (min-width: 1000px) {
+  #select, #world { height: 100svh; display: flex; flex-direction: column; padding-block: 14px; overflow: hidden; }
+  #select .select-bar, #world .topbar { margin-bottom: 12px; flex-shrink: 0; }
+  #select .foot { margin-top: 8px; flex-shrink: 0; }
+
+  /* Selección: vitrina y tarjetas llenan el alto; las tarjetas se desplazan dentro */
+  #select .home-grid { flex: 1; min-height: 0; align-items: stretch; }
+  #select .spotlight { position: static; overflow-y: auto; gap: 12px; padding: 18px; }
+  #select .prof-xl .prof-face { --s: 92px; }
+  #select .spot-map canvas { width: 100%; height: auto; max-height: 34vh; object-fit: contain; }
+  #select .spotlight { align-content: space-between; }
+  #select .case { display: flex; flex-direction: column; min-height: 0; }
+  #select .regions { flex: 1; min-height: 0; overflow-y: auto; grid-auto-rows: min-content; }
+
+  /* Región: mapa y panel llenan el alto disponible */
+  #world .layout, #world .region-dex { flex: 1; min-height: 0; }
+  #world .layout { align-items: stretch; }
+  #world .map-card { min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; }
+  #world #map { max-height: calc(100svh - 190px); }
+  #world .controls { padding-top: 10px; flex-shrink: 0; }
+  #world .dpad { grid-template: repeat(3, 36px) / repeat(3, 36px); }
+  #world .panel { position: static; max-height: none; overflow-y: auto; }
+  #world .region-dex { overflow-y: auto; }
+}
